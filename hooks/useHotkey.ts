@@ -11,12 +11,12 @@ const useHotkey = (keys: string[], fn: () => void) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      event.stopPropagation();
-      event.preventDefault();
       if (event.repeat) {
         return;
       }
       if (event.key === "Alt" || event.key === "Enter") {
+        event.stopPropagation();
+        event.preventDefault();
         event.preventDefault();
         setHotkey((prev) => [...prev, event.key]);
       }
