@@ -1,27 +1,73 @@
 import create from "zustand";
+import { combine } from "zustand/middleware";
 
-interface AppStore {
-  initialized: boolean;
-  initializing: boolean;
-  idle: boolean;
-  finished: boolean;
-  sentence: string;
-  initializeApp: (amount: number) => void;
-}
-
-export const useAppStore = create<AppStore>((set) => ({
-  initialized: false,
-  initializing: true,
-  idle: true,
-  finished: false,
-  sentence: "",
-  initializeApp: async (amount) => {
-    try {
-      const res = await fetch(`/api/words?amount=${amount}`);
-      const sentence = await res.json();
-      set({ sentence, initializing: false });
-    } catch (err) {
-      console.error(err);
-    }
-  },
-}));
+export const useAppStore = create(
+  combine(
+    {
+      initializing: true,
+      initialized: false,
+      //
+      wordAmount: 25,
+      //
+      idle: true,
+      started: false,
+      finished: false,
+      //
+      currWordIndex: 0,
+      currCharIndex: 0,
+      //
+      sentence: "",
+      words: [] as string[][],
+      //
+      inputText: "",
+    },
+    (set) => ({
+      setInitializing: (initializing: boolean) => set({ initializing }),
+      setInitialized: (initialized: boolean) => set({ initialized }),
+      ////
+      setWordAmount: (wordAmount: number) => set({ wordAmount }),
+      ////
+      startTest: () => {
+        console.log("starting!");
+        set({ idle: false, started: true });
+      },
+      finishTest: () => {
+        console.log("finished!");
+        set({ started: false, finished: true });
+      },
+      abortTest: () => {
+        console.log("aborting!");
+        set({ idle: true, started: false, finished: false });
+      },
+      ////
+      incrementWordIndex: () => set((state) => ({ currWordIndex: state.currWordIndex + 1 })), // prettier-ignore
+      decrementWordIndex: () => set((state) => ({ currWordIndex: state.currWordIndex - 1 })), // prettier-ignore
+      resetWordIndex: () => set({ currWordIndex: 0 }),
+      setWordIndex: (currWordIndex: number) => set({ currWordIndex }),
+      incrementCharIndex: () => set((state) => ({ currCharIndex: state.currCharIndex + 1 })), // prettier-ignore
+      decrementCharIndex: () => set((state) => ({ currCharIndex: state.currCharIndex - 1 })), // prettier-ignore
+      resetCharIndex: () => set({ currCharIndex: 0 }),
+      setCharIndex: (currCharIndex: number) => set({ currCharIndex }),
+      resetGame: () =>
+        set({
+          initialized: false,
+          initializing: true,
+          idle: true,
+          started: false,
+          finished: false,
+          currWordIndex: 0,
+          currCharIndex: 0,
+          sentence: "",
+          words: [],
+          inputText: "",
+        }),
+      ////
+      setSentence: (sentence: string) => set({ sentence }),
+      setWords: (sentence: string) => {
+        const words = sentence.split(" ").map((word) => word.split(""));
+        set({ words });
+      },
+      setInputText: (inputText: string) => set({ inputText }),
+    })
+  )
+);

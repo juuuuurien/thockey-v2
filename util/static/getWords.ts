@@ -7,5 +7,5 @@ export default function getWords(words: string[], amount: number): string {
     sentence += word + " ";
   }
 
-  return sentence;
+  return sentence.trim();
 }

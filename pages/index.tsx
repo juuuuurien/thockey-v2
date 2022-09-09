@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import BackgroundVideo from "../components/BackgroundVideo/BackgroundVideo";
-import Spinner from "../components/Spinner";
+import Spinner from "../components/Spinner/Spinner";
 import TypingTest from "../components/TypingTest/TypingTest";
 import { useAppStore } from "../hooks/useAppStore";
 import { SENTENCE } from "../util/static/static";
@@ -32,9 +32,6 @@ import { SENTENCE } from "../util/static/static";
   ================================================== */
 
 const Home: NextPage = () => {
-  const initializeApp = useAppStore((state) => state.initializeApp);
-  initializeApp(25);
-
   return (
     <div className="relative h-screen w-screen">
       <Head>

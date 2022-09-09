@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 type PropTypes = {
   keys: string[];
@@ -8,6 +8,11 @@ type PropTypes = {
 const useHotkey = (keys: string[], fn: () => void) => {
   const [hotkey, setHotkey] = useState<string[]>([]);
   const [key1, key2]: string[] = keys;
+
+  const handleFn = useCallback(() => {
+    // Has to memoize to keep from rerendering into infinite loop
+    fn();
+  }, [hotkey]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -31,15 +36,13 @@ const useHotkey = (keys: string[], fn: () => void) => {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
 
+    if (hotkey.includes(key1) && hotkey.includes(key2)) handleFn();
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  });
-
-  if (hotkey.includes(key1) && hotkey.includes(key2)) {
-    fn();
-  }
+  }, [hotkey]);
 
   return hotkey;
 };
