@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import BackgroundVideo from "../components/BackgroundVideo/BackgroundVideo";
+import HotkeyDisplay from "../components/HotkeyDisplay/HotkeyDisplay";
 import Spinner from "../components/Spinner/Spinner";
 import TypingTest from "../components/TypingTest/TypingTest";
 import { useAppStore } from "../hooks/useAppStore";

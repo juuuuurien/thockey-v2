@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "../../hooks/useAppStore";
+import HotkeyDisplay from "../HotkeyDisplay/HotkeyDisplay";
 
 import Spinner from "../Spinner/Spinner";
 import TypeTestInput from "../TypeTestInput/TypeTestInput";
@@ -56,9 +57,9 @@ const TypingTest = () => {
 
   return (
     <div className="flex flex-col w-screen h-screen justify-center items-center">
-      <div className="w-[50%] md:min-w-[720px]">
+      <div className="flex flex-col justify-center items-center w-[50%] md:min-w-[720px]">
         <div
-          className={`relative flex justify-center items-center  h-auto min-h-[148px] p-8 mb-2 bg-[#10364945] backdrop-blur-sm rounded-2xl text-xl bg-blend-multiply text-slate-50 font-DM font-light transition-all duration-300 ${
+          className={`relative flex justify-center items-center self-center h-auto min-h-[148px] p-8 mb-2 bg-[#10364945] backdrop-blur-sm rounded-2xl text-xl text-slate-50 font-DM font-light transition-all duration-300 ${
             focused ? null : "blur-sm opacity-50"
           }`}
         >
@@ -70,37 +71,39 @@ const TypingTest = () => {
             className={`relative flex flex-wrap text-slate-50`}
           >
             {initializing && <Spinner />}
-            <>
-              <div
-                id="cursor"
-                className={`cursor animate-pulse duration-[120] ${
-                  initializing && "hidden"
-                }`}
-              />
-              <div
-                className={`flex flex-wrap w-full ${initializing && "hidden"}`}
-              >
-                {sentence?.split(" ").map((word) => (
-                  <span className="word">
-                    {word.split("").map((char) => (
-                      <span className="char">{char}</span>
-                    ))}
-                  </span>
-                ))}
-              </div>
-            </>
+
+            <div
+              id="cursor"
+              className={`cursor animate-pulse duration-[120] ${
+                initializing && "hidden"
+              }`}
+            />
+            <div
+              className={`flex flex-wrap w-full ${initializing && "hidden"}`}
+            >
+              {sentence?.split(" ").map((word) => (
+                <span className="word">
+                  {word.split("").map((char) => (
+                    <span className="char">{char}</span>
+                  ))}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-        <TypeTestInput
-          ref={inputRef}
-          sentence={sentence}
-          focused={focused}
-          setFocused={setFocused}
-          setInitialized={setInitialized}
-          setInitializing={setInitializing}
-          initialized={initialized}
-          initializing={initializing}
-        />
+        <div className="relative flex flex-col justify-center items-center w-full">
+          <TypeTestInput
+            ref={inputRef}
+            sentence={sentence}
+            focused={focused}
+            setFocused={setFocused}
+            setInitialized={setInitialized}
+            setInitializing={setInitializing}
+            initialized={initialized}
+            initializing={initializing}
+          />
+          <HotkeyDisplay />
+        </div>
       </div>
     </div>
   );

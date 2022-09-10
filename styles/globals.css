@@ -22,15 +22,11 @@
   }
 
   .right {
-    @apply text-green-300;
+    @apply bg-green-300;
   }
 
   .wrong {
-    @apply text-red-300;
-  }
-
-  .extra {
-    @apply text-red-300;
+    @apply bg-red-300;
   }
 
   .unfocused {

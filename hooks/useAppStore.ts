@@ -68,6 +68,10 @@ export const useAppStore = create(
         set({ words });
       },
       setInputText: (inputText: string) => set({ inputText }),
+      setNewSentence: (sentence: string) => {
+        const newSentence = sentence.slice(20, sentence.length - 1);
+        set({ sentence: newSentence });
+      },
     })
   )
 );

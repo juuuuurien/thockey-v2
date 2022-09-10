@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, forwardRef } from "react";
 import { useAppStore } from "../../hooks/useAppStore";
 import useHotkey from "../../hooks/useHotkey";
+import { getSpanArray } from "../../util/static/getSpanArray";
 
 type PropTypes = {
   sentence: string;
@@ -38,15 +39,15 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     const resetWordIndex = useAppStore((state) => state.resetWordIndex);
     const resetCharIndex = useAppStore((state) => state.resetCharIndex);
     const setCharIndex = useAppStore((state) => state.setCharIndex);
+    const setNewSentence = useAppStore((state) => state.setNewSentence);
 
     const resetGame = useAppStore((state) => state.resetGame);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    let spanArray = Array.from(document.getElementsByClassName("word"));
+    let spanArray = getSpanArray();
     useEffect(() => {
-      if (!spanArray || spanArray.length < 1)
-        spanArray = Array.from(document.getElementsByClassName("word"));
+      if (!spanArray || spanArray.length < 1) spanArray = getSpanArray();
     });
 
     const handleFocus = () => {
@@ -57,27 +58,13 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
       setFocused(false);
     };
 
-    const handleAbort = () => {
-      console.log(" in handleAbort");
-      resetGame();
-      spanArray.forEach((word) => {
-        let _word = Array.from(word.children);
-        _word.forEach((letter) => {
-          letter.classList.remove("right", "wrong");
-          if (letter.classList.contains("extra")) letter.remove();
-        });
-      });
-    };
-
-    const keysPressed = useHotkey(["Alt", "Enter"], handleAbort);
-
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.value === " ") return;
 
       const input = e.target.value.trim();
 
       const currWordSpans = Array.from(spanArray[currWordIndex]?.children);
-      const currTextChars = e.target.value.trim().split("");
+      const currTextChars = input.split("");
 
       //=============================== Game Functions ==============================
       // if (idle && !started) {
@@ -87,28 +74,28 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
       // Determines if the e.target.value contains any extra characters
       // that are not included in the test word.
       if (
-        e.target.value.trim().length > words[currWordIndex].length ||
+        input.length > words[currWordIndex].length ||
         currWordSpans.length > words[currWordIndex].length
       ) {
         // Determines whether or not user is appending extra characters
-        if (e.target.value.length > currWordSpans.length) {
+        if (input.length > currWordSpans.length) {
           //appending more extras if the extra char isn't a space
           let extraChar = e.target.value.slice(-1);
           if (extraChar !== " ") {
             const newSpan = document.createElement("span");
             newSpan.innerHTML = extraChar;
-            newSpan.classList.add("extra");
+            newSpan.classList.add("extra", "wrong");
             spanArray[currWordIndex].appendChild(newSpan);
           }
         }
 
         // Determines whether or not user is deleting extra characters
-        if (e.target.value.length <= currWordSpans.length) {
+        if (input.length <= currWordSpans.length) {
           spanArray[currWordIndex].lastChild?.remove();
         }
 
         // Determines if user has deleted the whole contents of the text input
-        if (e.target.value.length < words[currWordIndex].length) {
+        if (input.length < words[currWordIndex].length) {
           currWordSpans.forEach((span) => {
             if (span.classList.contains("extra")) span.remove();
           });
@@ -120,7 +107,11 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
         // Loop through current word and apply right, wrong, class changes.
         // compare each element child (character) to the characters in text.
         if (currTextChars[i]) {
-          if (currTextChars[i] === el.innerHTML) {
+          console.log(currTextChars[i], "currTextChar[i]");
+          if (
+            currTextChars[i] === el.innerHTML &&
+            !el.classList.contains("extra")
+          ) {
             el.classList.add("right");
             // if (
             //   currWordIndex === words.length - 1 &&
@@ -144,15 +135,14 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
         resetCharIndex(); // Reset charIndex
         setInputText("");
       } else {
-        setCharIndex(e.target.value.length); // Sets the char index to exactly end of input
-        setInputText(e.target.value);
+        setCharIndex(input.length); // Sets the char index to exactly end of input
+        setInputText(input);
       }
     };
 
     useEffect(() => {
       // Controller that updates the cursor position
       if (cursor !== null) {
-        const currWordSpan = spanArray[currWordIndex] as HTMLElement;
         const currCharSpan = Array.from(spanArray[currWordIndex].children)[
           currCharIndex
         ] as HTMLElement;
@@ -186,13 +176,16 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     return (
       <>
         <input
-          className="self-start h-10 mr-4 focus:ring-2 focus:ring-pink-200 border-none focus:outline-none rounded-md opacity-0 "
+          className="h-10 mr-4 focus:ring-2 focus:ring-pink-200 border-none focus:outline-none rounded-md  "
           id="text_input"
           ref={ref}
           value={inputText}
           onChange={handleTextChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          autoFocus
+          autoComplete={"false"}
+          autoCorrect={"false"}
         />
       </>
     );
