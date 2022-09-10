@@ -91,17 +91,23 @@ const TypingTest = () => {
             </div>
           </div>
         </div>
-        <TypeTestInput
-          ref={inputRef}
-          sentence={sentence}
-          focused={focused}
-          setFocused={setFocused}
-          setInitialized={setInitialized}
-          setInitializing={setInitializing}
-          initialized={initialized}
-          initializing={initializing}
-        />
-        <HotkeyDisplay />
+        <div
+          className={`relative flex flex-row justify-center items-center w-full transition-all duration-300 ${
+            focused ? null : "blur-sm opacity-50"
+          }`}
+        >
+          <TypeTestInput
+            ref={inputRef}
+            sentence={sentence}
+            focused={focused}
+            setFocused={setFocused}
+            setInitialized={setInitialized}
+            setInitializing={setInitializing}
+            initialized={initialized}
+            initializing={initializing}
+          />
+          <HotkeyDisplay />
+        </div>
       </div>
     </div>
   );

@@ -175,7 +175,7 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     return (
       <input
         className="absolute p-2 mr-4 focus:ring-2 bg-[#10364980] text-slate-100  focus:ring-slate-200 border-none focus:outline-none rounded-md opacity-0 z-0 "
-        id="text_input"
+      id="text_input"
         ref={ref}
         value={inputText}
         onChange={handleTextChange}

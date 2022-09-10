@@ -29,13 +29,13 @@ const HotkeyDisplay = () => {
   return (
     <div className="flex flex-row gap-3 justify-center items-center">
       <span
-        className={` ${keysPressed.includes("Alt") ? "translate-y-1" : null}`}
+        className={` ${keysPressed.includes("Alt") ? "translate-y-2" : null}`}
       >
         <AltKey />
       </span>
       <span className="text-xl text-gray-900 font-bold">{"+"}</span>
       <span
-        className={` ${keysPressed.includes("Enter") ? "translate-y-1" : null}`}
+        className={` ${keysPressed.includes("Enter") ? "translate-y-2" : null}`}
       >
         <EnterKey />
       </span>
