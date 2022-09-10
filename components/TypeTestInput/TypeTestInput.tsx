@@ -90,7 +90,7 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
         }
 
         // Determines whether or not user is deleting extra characters
-        if (input.length <= currWordSpans.length) {
+        if (e.target.value.length <= currWordSpans.length) {
           spanArray[currWordIndex].lastChild?.remove();
         }
 
@@ -107,7 +107,6 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
         // Loop through current word and apply right, wrong, class changes.
         // compare each element child (character) to the characters in text.
         if (currTextChars[i]) {
-          console.log(currTextChars[i], "currTextChar[i]");
           if (
             currTextChars[i] === el.innerHTML &&
             !el.classList.contains("extra")
@@ -128,7 +127,7 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
         }
       });
 
-      // Controller that handles index increments
+      // Controller that handles index increments and decrements
       if (/\s+$/.test(e.target.value)) {
         // If text input ends with space, move onto the next word
         incrementWordIndex(); // Increment wordIndex
@@ -174,20 +173,18 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     }, [inputText, initialized, initializing, spanArray]);
 
     return (
-      <>
-        <input
-          className="h-10 mr-4 focus:ring-2 focus:ring-pink-200 border-none focus:outline-none rounded-md  "
-          id="text_input"
-          ref={ref}
-          value={inputText}
-          onChange={handleTextChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          autoFocus
-          autoComplete={"false"}
-          autoCorrect={"false"}
-        />
-      </>
+      <input
+        className="absolute p-2 mr-4 focus:ring-2 bg-[#10364980] text-slate-100  focus:ring-slate-200 border-none focus:outline-none rounded-md opacity-0 z-0 "
+        id="text_input"
+        ref={ref}
+        value={inputText}
+        onChange={handleTextChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        autoFocus
+        autoComplete={"off"}
+        autoCorrect={"off"}
+      />
     );
   }
 );

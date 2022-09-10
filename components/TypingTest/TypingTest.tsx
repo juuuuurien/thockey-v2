@@ -59,7 +59,7 @@ const TypingTest = () => {
     <div className="flex flex-col w-screen h-screen justify-center items-center">
       <div className="flex flex-col justify-center items-center w-[50%] md:min-w-[720px]">
         <div
-          className={`relative flex justify-center items-center self-center h-auto min-h-[148px] p-8 mb-2 bg-[#10364945] backdrop-blur-sm rounded-2xl text-xl text-slate-50 font-DM font-light transition-all duration-300 ${
+          className={`relative flex justify-center items-center self-center h-auto min-h-[148px] w-full p-8 mb-2 bg-[#10364945] backdrop-blur-sm rounded-2xl text-xl text-slate-50 font-DM font-light transition-all duration-300 ${
             focused ? null : "blur-sm opacity-50"
           }`}
         >
@@ -91,19 +91,17 @@ const TypingTest = () => {
             </div>
           </div>
         </div>
-        <div className="relative flex flex-col justify-center items-center w-full">
-          <TypeTestInput
-            ref={inputRef}
-            sentence={sentence}
-            focused={focused}
-            setFocused={setFocused}
-            setInitialized={setInitialized}
-            setInitializing={setInitializing}
-            initialized={initialized}
-            initializing={initializing}
-          />
-          <HotkeyDisplay />
-        </div>
+        <TypeTestInput
+          ref={inputRef}
+          sentence={sentence}
+          focused={focused}
+          setFocused={setFocused}
+          setInitialized={setInitialized}
+          setInitializing={setInitializing}
+          initialized={initialized}
+          initializing={initializing}
+        />
+        <HotkeyDisplay />
       </div>
     </div>
   );

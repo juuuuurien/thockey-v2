@@ -4,6 +4,9 @@ import useHotkey from "../../hooks/useHotkey";
 import { getSpanArray } from "../../util/static/getSpanArray";
 
 import { Transition } from "@headlessui/react";
+import Image from "next/image";
+import AltKey from "./Hotkeys/AltKey";
+import EnterKey from "./Hotkeys/EnterKey";
 
 const HotkeyDisplay = () => {
   const resetGame = useAppStore((state) => state.resetGame);
@@ -21,35 +24,22 @@ const HotkeyDisplay = () => {
     });
   });
 
+  console.log(keysPressed);
+
   return (
-    <div className="flex flex-row gap-5 justify-center items-center">
-      <Transition
-        show={keysPressed.includes("Alt")}
-        enter="transition-opacity duration-75"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
+    <div className="flex flex-row gap-3 justify-center items-center">
+      <span
+        className={` ${keysPressed.includes("Alt") ? "translate-y-1" : null}`}
       >
-        <span className="text-2xl font-bold text-slate-100 bg-[#00000080] p-3 rounded-lg">
-          Alt
-        </span>
-      </Transition>
-      <span className="text-lg text-slate-50 font-bold">+</span>
-      {/* <Transition
-        show={keysPressed.includes("Enter")}
-        enter="transition-opacity duration-75"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      > */}
-      <span className="text-lg font-bold text-slate-100 bg-[#00000080] p-3 rounded-lg">
-        Enter
+        <AltKey />
       </span>
-      {/* </Transition> */}
+      <span className="text-xl text-gray-900 font-bold">{"+"}</span>
+      <span
+        className={` ${keysPressed.includes("Enter") ? "translate-y-1" : null}`}
+      >
+        <EnterKey />
+      </span>
+      <span className="text-lg text-gray-900 font-bold">{"= reset"}</span>
     </div>
   );
 };

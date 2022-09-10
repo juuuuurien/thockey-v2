@@ -22,11 +22,11 @@
   }
 
   .right {
-    @apply bg-green-300;
+    @apply bg-green-300  transition-all;
   }
 
   .wrong {
-    @apply bg-red-300;
+    @apply bg-red-300  transition-all;
   }
 
   .unfocused {

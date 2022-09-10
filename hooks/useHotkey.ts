@@ -19,7 +19,7 @@ const useHotkey = (keys: string[], fn: () => void) => {
       if (event.repeat) {
         return;
       }
-      if (event.key === "Alt" || event.key === "Enter") {
+      if (event.key === key1 || event.key === key2) {
         event.stopPropagation();
         event.preventDefault();
         event.preventDefault();
@@ -30,6 +30,7 @@ const useHotkey = (keys: string[], fn: () => void) => {
     const handleKeyUp = (event: KeyboardEvent) => {
       event.stopPropagation();
       event.preventDefault();
+      if (!keys.includes(event.key)) return;
       setHotkey((prev) => prev.slice(0, prev.length - 1));
     };
 
