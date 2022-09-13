@@ -7,6 +7,7 @@ import { useAppStore } from "../../hooks/useAppStore";
 import HotkeyDisplay from "../HotkeyDisplay/HotkeyDisplay";
 
 import Spinner from "../Spinner/Spinner";
+import Timer from "../Timer/Timer";
 import TypeTestInput from "../TypeTestInput/TypeTestInput";
 
 const TypingTest = () => {
@@ -31,6 +32,11 @@ const TypingTest = () => {
   const words = useAppStore((state) => state.words);
   const setSentence = useAppStore((state) => state.setSentence);
   const setWords = useAppStore((state) => state.setWords);
+
+  const started = useAppStore((state) => state.started);
+
+  const startTest = useAppStore((state) => state.startTest);
+  const finishTest = useAppStore((state) => state.finishTest);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState<boolean>(true);
@@ -64,7 +70,21 @@ const TypingTest = () => {
           }`}
         >
           <div className="absolute top-0 left-0 w-[25%] h-[60px] mt-[-44px] ml-2">
-            <Image src="/Thockey_logo.svg" layout="fill" objectFit="contain" />
+            <div
+              className={`transition-all delay-300 ${
+                started ? "opacity-1" : "opacity-0"
+              }`}
+            >
+              <Timer />
+            </div>
+            <Image
+              className={`transition-all delay-300 ${
+                started ? "opacity-0" : "opacity-1"
+              }`}
+              src="/Thockey_logo.svg"
+              layout="fill"
+              objectFit="contain"
+            />
           </div>
           <div
             onClick={() => inputRef.current?.focus()}

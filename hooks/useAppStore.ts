@@ -7,11 +7,14 @@ export const useAppStore = create(
       initializing: true,
       initialized: false,
       //
-      wordAmount: 25,
+      wordAmount: 5,
       //
       idle: true,
       started: false,
       finished: false,
+      //
+      time: 0,
+      wpm: 0,
       //
       currWordIndex: 0,
       currCharIndex: 0,
@@ -40,6 +43,10 @@ export const useAppStore = create(
         set({ idle: true, started: false, finished: false });
       },
       ////
+      setTimeAndWPM: (time: number, wpm: number) => {
+        set({ time, wpm });
+      },
+      ////
       incrementWordIndex: () => set((state) => ({ currWordIndex: state.currWordIndex + 1 })), // prettier-ignore
       decrementWordIndex: () => set((state) => ({ currWordIndex: state.currWordIndex - 1 })), // prettier-ignore
       resetWordIndex: () => set({ currWordIndex: 0 }),
@@ -55,6 +62,8 @@ export const useAppStore = create(
           idle: true,
           started: false,
           finished: false,
+          time: 0,
+          wpm: 0,
           currWordIndex: 0,
           currCharIndex: 0,
           sentence: "",

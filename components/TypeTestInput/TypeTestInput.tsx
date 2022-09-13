@@ -32,6 +32,10 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
       state.inputText,
       state.setInputText,
     ]);
+
+    const startTest = useAppStore((state) => state.startTest);
+    const finishTest = useAppStore((state) => state.finishTest);
+
     const words = useAppStore((state) => state.words);
     const currWordIndex = useAppStore((state) => state.currWordIndex);
     const currCharIndex = useAppStore((state) => state.currCharIndex);
@@ -40,8 +44,6 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     const resetCharIndex = useAppStore((state) => state.resetCharIndex);
     const setCharIndex = useAppStore((state) => state.setCharIndex);
     const setNewSentence = useAppStore((state) => state.setNewSentence);
-
-    const resetGame = useAppStore((state) => state.resetGame);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -61,15 +63,12 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.value === " ") return;
 
+      startTest();
+
       const input = e.target.value.trim();
 
       const currWordSpans = Array.from(spanArray[currWordIndex]?.children);
       const currTextChars = input.split("");
-
-      //=============================== Game Functions ==============================
-      // if (idle && !started) {
-      //   startTest();
-      // }
 
       // Determines if the e.target.value contains any extra characters
       // that are not included in the test word.
@@ -112,13 +111,12 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
             !el.classList.contains("extra")
           ) {
             el.classList.add("right");
-            // if (
-            //   currWordIndex === words.length - 1 &&
-            //   currCharIndex ===
-            //     words[currWordIndex].length - 1
-            // ) {
-            //   finishTest();
-            // }
+            if (
+              currWordIndex === words.length - 1 &&
+              currCharIndex === words[currWordIndex].length - 1
+            ) {
+              finishTest();
+            }
           } else {
             el.classList.add("wrong");
           }
@@ -130,6 +128,13 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
       // Controller that handles index increments and decrements
       if (/\s+$/.test(e.target.value)) {
         // If text input ends with space, move onto the next word
+        Array.from(spanArray[currWordIndex].children).some((el) => {
+          if (el.classList.contains("wrong"))
+            Array.from(spanArray[currWordIndex].children).forEach((el) => {
+              el.classList.remove("right");
+              el.classList.add("wrong");
+            });
+        });
         incrementWordIndex(); // Increment wordIndex
         resetCharIndex(); // Reset charIndex
         setInputText("");
@@ -175,7 +180,7 @@ const TypeTestInput = forwardRef<HTMLInputElement, PropTypes>(
     return (
       <input
         className="absolute p-2 mr-4 focus:ring-2 bg-[#10364980] text-slate-100  focus:ring-slate-200 border-none focus:outline-none rounded-md opacity-0 z-0 "
-      id="text_input"
+        id="text_input"
         ref={ref}
         value={inputText}
         onChange={handleTextChange}
