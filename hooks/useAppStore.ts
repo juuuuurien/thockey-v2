@@ -7,7 +7,7 @@ export const useAppStore = create(
       initializing: true,
       initialized: false,
       //
-      wordAmount: 5,
+      wordAmount: 20,
       //
       idle: true,
       started: false,
